@@ -1,5 +1,5 @@
 import React from "react";
-import milify from "millify";
+import millify from "millify";
 import { Typography, Row, Col, Statistic } from "antd";
 import { Link } from "react-router-dom";
 const { Title } = Typography;
@@ -8,9 +8,17 @@ import Cryptocurrencies from "./Cryptocurrencies";
 import Loader from "./Loader";
 
 const Home = () => {
-  const { data, isFetching } = useGetCryptosQuery(10);
+  const { data, isFetching, error } = useGetCryptosQuery(10);
+
   if (isFetching) return <Loader />;
+  if (error) {
+    console.error("Error fetching data:", error);
+    return <div>Error fetching data: {error.message}</div>;
+  }
+
   const globalStats = data?.data?.stats;
+
+  console.log("Global Stats:", globalStats);
 
   return (
     <>
@@ -24,25 +32,25 @@ const Home = () => {
         <Col span={12}>
           <Statistic
             title="Total Exchanges"
-            value={milify(globalStats.totalExchanges)}
+            value={millify(globalStats.totalExchanges)}
           />
         </Col>
         <Col span={12}>
           <Statistic
             title="Total Market Cap"
-            value={milify(globalStats.totalMarketCap)}
+            value={millify(globalStats.totalMarketCap)}
           />
         </Col>
         <Col span={12}>
           <Statistic
             title="Total 24h Volume"
-            value={milify(globalStats.total24hVolume)}
+            value={millify(globalStats.total24hVolume)}
           />
         </Col>
         <Col span={12}>
           <Statistic
             title="Total Markets"
-            value={milify(globalStats.totalMarkets)}
+            value={millify(globalStats.totalMarkets)}
           />
         </Col>
       </Row>
